@@ -1,0 +1,250 @@
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="delivery-tab" data-bs-toggle="tab" data-bs-target="#delivery-tab-pane" type="button" role="tab" aria-controls="delivery-tab-pane" aria-selected="true">Delivery</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pickup-tab" data-bs-toggle="tab" data-bs-target="#pickup-tab-pane" type="button" role="tab" aria-controls="pickup-tab-pane" aria-selected="false">Pick Up</button>
+        </li>
+    </ul>
+    
+    <div class="tab-content" id="myTabContent">
+        <!-- Delivery Tab -->
+        <div class="tab-pane fade show active" id="delivery-tab-pane" role="tabpanel" aria-labelledby="delivery-tab" tabindex="0">
+            <div class="delivery-date-selector">
+                <h3>Select Delivery Date</h3>
+                <div id="delivery-options">
+                    <button id="delivery-today" class="delivery-button">Today</button>
+                    <button id="delivery-tomorrow" class="delivery-button">Tomorrow</button>
+                    <button id="delivery-later" class="delivery-button">Later</button>
+                </div>
+                <div id="delivery-calendar-container" style="display: block;">
+                    <label class="form__label custom">Delivery Date</label>
+                    <div class="field custom">
+                        <input class="field__input" type="date" id="delivery-date" name="properties[Delivery Date]" form="{{ 'product-form-' | append: section.id }}">
+                    </div>
+                </div>
+                <div id="selected-delivery-date-message"></div>
+            </div>
+            <style>
+                .custom.form__label {
+                    margin-bottom: 0.6rem;
+                }
+    
+                .field.custom {
+                    margin-top: 0;
+                }
+    
+                .custom .field__input {
+                    padding-top: 0.8rem;
+                    font-family: var(--font-body-family);
+                    color: rgba(var(--color-foreground), .75);
+                    font-size: 1.2rem;
+                }
+    
+                .delivery-date-selector {
+                    margin: 20px 0;
+                }
+    
+                .delivery-button {
+                    padding: 10px 15px;
+                    margin: 5px;
+                    border: none;
+                    background-color: #0000009d;
+                    color: white;
+                    cursor: pointer;
+                    border-radius: 5px;
+                }
+    
+                .delivery-button:hover {
+                    background-color: #121212;
+                }
+    
+                .delivery-button:disabled {
+                    background-color: #ccc;
+                    cursor: not-allowed;
+                }
+            </style>
+    
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const todayButton = document.getElementById('delivery-today');
+                    const tomorrowButton = document.getElementById('delivery-tomorrow');
+                    const laterButton = document.getElementById('delivery-later');
+                    const selectedDateMessage = document.getElementById('selected-delivery-date-message');
+                    const calendarContainer = document.getElementById('delivery-calendar-container');
+                    const deliveryDateInput = document.getElementById('delivery-date');
+    
+                    // Function to format date to YYYY-MM-DD
+                    function formatDate(date) {
+                        return date.toISOString().split('T')[0];
+                    }
+    
+                    // Function to check the current time and hide the Today button if necessary
+                    function checkTime() {
+                        const now = new Date();
+                        const hours = now.getHours();
+                        const minutes = now.getMinutes();
+                        const currentTime = hours * 60 + minutes; // Convert time to minutes
+    
+                        // Hide Today button if current time is after 11 PM or before 8 AM
+                        if (currentTime >= 23 * 60 || currentTime < 8 * 60) {
+                            todayButton.style.display = 'none';
+                        } else {
+                            todayButton.style.display = 'inline-block';
+                        }
+                    }
+    
+                    // Event listeners for delivery buttons
+                    todayButton.onclick = function () {
+                        const today = new Date();
+                        deliveryDateInput.value = formatDate(today);
+                        selectedDateMessage.textContent = "You selected: Today";
+                        calendarContainer.style.display = 'block'; // Show calendar
+                    };
+    
+                    tomorrowButton.onclick = function () {
+                        const tomorrow = new Date();
+                        tomorrow.setDate(tomorrow.getDate() + 1);
+                        deliveryDateInput .value = formatDate(tomorrow);
+                        selectedDateMessage.textContent = "You selected: Tomorrow";
+                        calendarContainer.style.display = 'block'; // Show calendar
+                    };
+    
+                    laterButton.onclick = function () {
+                        selectedDateMessage.textContent = "You selected: Later";
+                        calendarContainer.style.display = 'block'; // Show calendar
+                    };
+    
+                    // Check the time on page load
+                    checkTime();
+                });
+            </script>
+        </div>
+    
+        <!-- Pickup Tab -->
+        <div class="tab-pane fade" id="pickup-tab-pane" role="tabpanel" aria-labelledby="pickup-tab" tabindex="0">
+            <div class="pickup-date-selector">
+                <h3>Select Pickup Date</h3>
+                <div id="pickup-options">
+                    <button id="pickup-today" class="pickup-button">Today</button>
+                    <button id="pickup-tomorrow" class="pickup-button">Tomorrow</button>
+                    <button id="pickup-later" class="pickup-button">Later</button>
+                </div>
+                <div id="pickup-calendar-container" style="display: block;">
+                    <label class="form__label custom">Pickup Date</label>
+                    <div class="field custom">
+                        <input class="field__input" type="date" id="pickup-date" name="properties[pickup Date]" form="{{ 'product-form-' | append: section.id }}">
+                    </div>
+                    <label for="pickup-start-time" style="font-size:1.3rem;">Pickup Time</label>
+                    <select id="pickup-start-time" name="properties[Pickup Time]">
+                        <option value="08:00 AM">08:00 AM</option>
+<option value="08:15 AM">08:15 AM</option>
+<option value="08:30 AM">08:30 AM</option>
+<option value="08:45 AM">08:45 AM</option>
+<option value="09:00 AM">09:00 AM</option>
+<option value="09:15 AM">09:15 AM</option>
+<option value="09:30 AM">09:30 AM</option>
+<option value="09:45 AM">09:45 AM</option>
+<option value="10:00 AM">10:00 AM</option>
+<option value="10:15 AM">10:15 AM</option>
+<option value="10:30 AM">10:30 AM</option>
+<option value="10:45 AM">10:45 AM</option>
+<option value="11:00 AM">11:00 AM</option>
+<option value="11:15 AM">11:15 AM</option>
+<option value="11:30 AM">11:30 AM</option>
+<option value="11:45 AM">11:45 AM</option>
+<option value="12:00 PM">12:00 PM</option>
+<option value="12:15 PM">12:15 PM</option>
+<option value="12:30 PM">12:30 PM</option>
+<option value="12:45 PM">12:45 PM</option>
+<option value="01:00 PM">01:00 PM</option>
+<option value="01:15 PM">01:15 PM</option>
+<option value="01:30 PM">01:30 PM</option>
+<option value="01:45 PM">01:45 PM</option>
+<option value="02:00 PM">02:00 PM</option>
+<option value="02:15 PM">02:15 PM</option>
+<option value="02:30 PM">02:30 PM</option>
+<option value="02:45 PM">02:45 PM</option>
+<option value="03:00 PM">03:00 PM</option>
+<option value="03:15 PM">03:15 PM</option>
+<option value="03:30 PM">03:30 PM</option>
+<option value="03:45 PM">03:45 PM</option>
+<option value="04:00 PM">04:00 PM</option>
+<option value="04:15 PM">04:15 PM</option>
+<option value="04:30 PM">04:30 PM</option>
+<option value="04:45 PM">04:45 PM</option>
+<option value="05:00 PM">05:00 PM</option>
+<option value="05:15 PM">05:15 PM</option>
+<option value="05:30 PM">05:30 PM</option>
+<option value="05:45 PM">05:45 PM</option>
+<option value="06:00 PM">06:00 PM</option>
+<option value="06:15 PM">06:15 PM</option>
+                    </select>
+                </div>
+                <div id="selected-pickup-date-message"></div>
+            </div>
+    
+            <style>
+                .pickup-date-selector {
+                    margin: 20px 0;
+                }
+    
+                .pickup-button {
+                    padding: 10px 15px;
+                    margin: 5px;
+                    border: none;
+                    background-color: #0000009d;
+                    color: white;
+                    cursor: pointer;
+                    border-radius: 5px;
+                }
+    
+                .pickup-button:hover {
+                    background-color: #121212;
+                }
+            </style>
+    
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const todayButton = document.getElementById('pickup-today');
+                    const tomorrowButton = document.getElementById('pickup-tomorrow');
+                    const laterButton = document.getElementById('pickup-later');
+                    const selectedDateMessage = document.getElementById('selected-pickup-date-message');
+                    const calendarContainer = document.getElementById('pickup-calendar-container');
+                    const pickupDateInput = document.getElementById('pickup-date');
+                    const pickupTimeSelect = document.getElementById('pickup-start-time');
+    
+                    // Function to format date to YYYY-MM-DD
+                    function formatDate(date) {
+                        return date.toISOString().split('T')[0];
+                    }
+    
+                    // Event listeners for pickup buttons
+                    todayButton.onclick = function () {
+                        const today = new Date();
+                        pickupDateInput.value = formatDate(today );
+                        selectedDateMessage.textContent = "You selected: Today";
+                        calendarContainer.style.display = 'block'; // Show calendar
+                    };
+    
+                    tomorrowButton.onclick = function () {
+                        const tomorrow = new Date();
+                        tomorrow.setDate(tomorrow.getDate() + 1);
+                        pickupDateInput.value = formatDate(tomorrow);
+                        selectedDateMessage.textContent = "You selected: Tomorrow";
+                        calendarContainer.style.display = 'block'; // Show calendar
+                    };
+    
+                    laterButton.onclick = function () {
+                        selectedDateMessage.textContent = "You selected: Later";
+                        calendarContainer.style.display = 'block'; // Show calendar
+                    };
+    
+                    pickupTimeSelect.onchange = function () {
+                        const selectedTime = pickupTimeSelect.value;
+                        selectedDateMessage.textContent += ` at ${selectedTime}`;
+                    };
+                });
+            </script>
+        </div>
+    </div>
